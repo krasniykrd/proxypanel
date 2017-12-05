@@ -292,6 +292,7 @@
 
                                                     function workersInfoCallback(data) {
                                                         if (data !== null && typeof data === 'object' && Object.size(data) > 0) {
+                                                            workers = [];
                                                             $.each(data.workers, function (i, worker) {
                                                                 if (parseInt(worker[2]) > 0) {
                                                                     var workdata = [worker[0], worker[2], worker[1], worker[8] + ' Kh', worker[10] + ' Kh', worker[11] + ' Kh', worker[12] + ' Kh'];
