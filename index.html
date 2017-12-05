@@ -314,7 +314,13 @@
                                                         if (data !== null && typeof data === 'object' && Object.size(data) > 0) {
                                                             workers = [];
                                                             $.each(data.workers, function (i, worker) {
-                                                                var workdata = [worker[0], worker[2], worker[1], worker[8] + ' Kh', worker[10] + ' Kh', worker[11] + ' Kh', worker[12] + ' Kh'];
+                                                                var name = '';
+                                                                if(worker[0].length > 30) {
+                                                                    name = '<span data-toggle="tooltip" data-placement="top" title="'+worker[0]+'">'+worker[0].substr(0,30)+'...</span>';
+                                                                } else {
+                                                                    name = worker[0];
+                                                                }
+                                                                var workdata = [name, worker[2], worker[1], worker[8] + ' Kh', worker[10] + ' Kh', worker[11] + ' Kh', worker[12] + ' Kh'];
                                                                 if (parseInt(worker[2]) > 0) {
                                                                     workers.push(workdata);
                                                                 } else {
@@ -364,12 +370,12 @@
                                                             data: workers,
                                                             columns: [
                                                                 {title: "Name"},
-                                                                {title: "Count"},
-                                                                {title: "Last IP"},
-                                                                {title: "Hashrate"},
-                                                                {title: "Hashrate 1h"},
-                                                                {title: "Hashrate 12h"},
-                                                                {title: "Hashrate 24h"}
+                                                                {title: "Count", width: '5%'},
+                                                                {title: "Last IP", width: '5%'},
+                                                                {title: "Hashrate", width: '5%'},
+                                                                {title: "Hashrate 1h", width: '5%'},
+                                                                {title: "Hashrate 12h", width: '5%'},
+                                                                {title: "Hashrate 24h", width: '5%'}
                                                             ],
                                                             "order": [[3, "desc"]]
                                                         });
@@ -377,12 +383,12 @@
                                                             data: naworkers,
                                                             columns: [
                                                                 {title: "Name"},
-                                                                {title: "Count"},
+                                                                {title: "Count", width: '5%'},
                                                                 {title: "Last IP"},
-                                                                {title: "Hashrate"},
-                                                                {title: "Hashrate 1h"},
-                                                                {title: "Hashrate 12h"},
-                                                                {title: "Hashrate 24h"}
+                                                                {title: "Hashrate", width: '5%'},
+                                                                {title: "Hashrate 1h", width: '5%'},
+                                                                {title: "Hashrate 12h", width: '5%'},
+                                                                {title: "Hashrate 24h", width: '5%'}
                                                             ],
                                                             "order": [[3, "desc"]]
                                                         });
