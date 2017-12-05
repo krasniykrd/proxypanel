@@ -45,16 +45,25 @@
                         <div class="row">
                             <div id="main" style="display: none">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="info-box">
                                             <span class="info-box-icon bg-green"><i class="ion ion-heart"></i></span>
                                             <div class="info-box-content">
-                                                <span class="info-box-text">Active workers</span>
+                                                <span class="info-box-text">Online workers</span>
                                                 <span class="info-box-number" id="activeworkers"></span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <div class="info-box">
+                                            <span class="info-box-icon bg-red"><i class="ion ion-heart-broken"></i></span>
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">Offline workers</span>
+                                                <span class="info-box-number" id="notactiveworkers"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
                                         <div class="info-box">
                                             <span class="info-box-icon bg-aqua"><i class="ion ion-ios-world-outline"></i></span>
                                             <div class="info-box-content">
@@ -140,12 +149,20 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="box">
+                                <div class="box box-success">
                                     <div class="box-header">
-                                        <h3 class="box-title">Active workers</h3>
+                                        <h3 class="box-title">Online workers</h3>
                                     </div>
                                     <div class="box-body">
                                         <table id="workerstable" class="table table-bordered table-hover table-striped" style="width: 100%"></table>
+                                    </div>
+                                </div>
+                                <div class="box box-danger">
+                                    <div class="box-header">
+                                        <h3 class="box-title">Offline workers</h3>
+                                    </div>
+                                    <div class="box-body">
+                                        <table id="naworkerstable" class="table table-bordered table-hover table-striped" style="width: 100%"></table>
                                     </div>
                                 </div>
                             </div>
@@ -189,7 +206,7 @@
                                                         'https://api.coinmarketcap.com/v1/ticker/aeon/'
                                                     ];
 
-                                                    var miRefresh, wiRefresh, datatable, workers = [];
+                                                    var miRefresh, wiRefresh, datatable, datatable2, workers = [], naworkers = [];
 
                                                     function trim(s, c) {
                                                         if (c === "]")
@@ -251,9 +268,11 @@
                                                                 clearInterval(wiRefresh);
                                                             }
                                                             workers = [];
+                                                            naworkers = [];
                                                             fillTable();
                                                             $('#allworkers').text('');
                                                             $('#activeworkers').text('');
+                                                            $('#notactiveworkers').text('');
                                                             $('#hashrate').text('');
                                                             $('#hashrate1h').text('');
                                                             $('#hashrate12h').text('');
@@ -279,6 +298,7 @@
                                                         if (data !== null && typeof data === 'object' && Object.size(data) > 0) {
                                                             $('#allworkers').text(data.miners.max);
                                                             $('#activeworkers').text(data.miners.now);
+                                                            $('#notactiveworkers').text(parseInt(data.miners.max) - parseInt(data.miners.now));
                                                             $('#hashrate').text(data.hashrate.total[0] + ' Kh');
                                                             $('#hashrate1h').text(data.hashrate.total[2] + ' Kh');
                                                             $('#hashrate12h').text(data.hashrate.total[3] + ' Kh');
@@ -294,9 +314,11 @@
                                                         if (data !== null && typeof data === 'object' && Object.size(data) > 0) {
                                                             workers = [];
                                                             $.each(data.workers, function (i, worker) {
+                                                                var workdata = [worker[0], worker[2], worker[1], worker[8] + ' Kh', worker[10] + ' Kh', worker[11] + ' Kh', worker[12] + ' Kh'];
                                                                 if (parseInt(worker[2]) > 0) {
-                                                                    var workdata = [worker[0], worker[2], worker[1], worker[8] + ' Kh', worker[10] + ' Kh', worker[11] + ' Kh', worker[12] + ' Kh'];
                                                                     workers.push(workdata);
+                                                                } else {
+                                                                    naworkers.push(workdata);
                                                                 }
                                                             });
                                                             fillTable();
@@ -327,6 +349,11 @@
                                                             datatable.rows.add(workers);
                                                             datatable.draw();
                                                         }
+                                                        if (datatable2 !== null && typeof datatable2 === 'object') {
+                                                            datatable2.clear();
+                                                            datatable2.rows.add(naworkers);
+                                                            datatable2.draw();
+                                                        }
                                                     }
                                                     $(document).ready(function () {
                                                         checkProxyUrl();
@@ -344,7 +371,20 @@
                                                                 {title: "Hashrate 12h"},
                                                                 {title: "Hashrate 24h"}
                                                             ],
-                                                            "order": [[ 3, "desc" ]]
+                                                            "order": [[3, "desc"]]
+                                                        });
+                                                        datatable2 = $('#naworkerstable').DataTable({
+                                                            data: workers,
+                                                            columns: [
+                                                                {title: "Name"},
+                                                                {title: "Count"},
+                                                                {title: "Last IP"},
+                                                                {title: "Hashrate"},
+                                                                {title: "Hashrate 1h"},
+                                                                {title: "Hashrate 12h"},
+                                                                {title: "Hashrate 24h"}
+                                                            ],
+                                                            "order": [[3, "desc"]]
                                                         });
                                                     });
         </script>
