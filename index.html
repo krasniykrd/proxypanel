@@ -296,9 +296,6 @@
 
                                                     function mainInfoCallback(data) {
                                                         if (data !== null && typeof data === 'object' && Object.size(data) > 0) {
-                                                            $('#allworkers').text(data.miners.max);
-                                                            $('#activeworkers').text(data.miners.now);
-                                                            $('#notactiveworkers').text(parseInt(data.miners.max) - parseInt(data.miners.now));
                                                             $('#hashrate').text(data.hashrate.total[0] + ' Kh');
                                                             $('#hashrate1h').text(data.hashrate.total[2] + ' Kh');
                                                             $('#hashrate12h').text(data.hashrate.total[3] + ' Kh');
@@ -313,6 +310,8 @@
                                                     function workersInfoCallback(data) {
                                                         if (data !== null && typeof data === 'object' && Object.size(data) > 0) {
                                                             workers = [];
+                                                            var aworkerscount = 0;
+                                                            var naworkerscount = 0;
                                                             $.each(data.workers, function (i, worker) {
                                                                 var name = '';
                                                                 if(worker[0].length > 30) {
@@ -323,10 +322,15 @@
                                                                 var workdata = [name, worker[2], worker[1], worker[8] + ' Kh', worker[10] + ' Kh', worker[11] + ' Kh', worker[12] + ' Kh'];
                                                                 if (parseInt(worker[2]) > 0) {
                                                                     workers.push(workdata);
+                                                                    aworkerscount++;
                                                                 } else {
                                                                     naworkers.push(workdata);
+                                                                    naworkerscount++;
                                                                 }
                                                             });
+                                                            $('#allworkers').text(aworkerscount + naworkerscount);
+                                                            $('#activeworkers').text(aworkerscount);
+                                                            $('#notactiveworkers').text(naworkerscount);
                                                             fillTable();
                                                         }
                                                     }
