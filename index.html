@@ -310,6 +310,7 @@
                                                     function workersInfoCallback(data) {
                                                         if (data !== null && typeof data === 'object' && Object.size(data) > 0) {
                                                             workers = [];
+                                                            naworkers = [];
                                                             var aworkerscount = 0;
                                                             var naworkerscount = 0;
                                                             $.each(data.workers, function (i, worker) {
